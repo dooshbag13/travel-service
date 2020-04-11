@@ -35,7 +35,7 @@ public class TravelCalculationServiceImpl implements TravelCalculationService {
 		  .append("He will have ").append( String.format("%.2f", request.getCurrency().getLocalAmount(moneyLeftoverEuro)))
 		  .append(" ").append(request.getCurrency()).append(" leftover.");
 		
-		if(countriesNumberToVisit > 0) {
+		if(tripsAroundNeighbours > 0) {
 			countriesGraph.getCountryNeighbours(request.getCountry()).forEach(country ->{
 				sb.append("For ").append(country).append(" he will need to buy ");
 				sb.append( String.format("%.2f", country.getCurrency().getLocalAmount(totalMoneyForCountryEuro)))
