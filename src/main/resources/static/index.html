@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Demo</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width" />
+<base href="/" />
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+<script type="text/javascript"
+	src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
+<script type="text/javascript">
+	$.ajaxSetup({
+		beforeSend : function(xhr, settings) {
+			if (settings.type == 'POST' || settings.type == 'PUT'
+					|| settings.type == 'DELETE') {
+				if (!(/^http:.*/.test(settings.url) || /^https:.*/
+						.test(settings.url))) {
+					xhr.setRequestHeader("X-XSRF-TOKEN", Cookies
+							.get('XSRF-TOKEN'));
+				}
+			}
+		}
+	});
+
+	$(document).ready(function() {
+		$("#bth-search").click(function(event) {
+			event.preventDefault();
+			var data = {
+				"country" : $("#country").val(),
+				"budgetPerCountry" : $("#budgetPerCountry").val(),
+				"totalBudget" : $("#totalBudget").val(),
+				"currency" : $("#currency").val()
+			}
+			console.log(data)
+
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "/travel",
+				data : JSON.stringify(data),
+				success : function(data) {
+					$("#output").text(data);
+					console.log("SUCCESS : ", data);
+					$("#btnSubmit").prop("disabled", false);
+
+					$("#result").html(data.bottomLineMessage);
+				},
+				error : function(e) {
+					$("#result").text(e.responseText);
+					console.log("ERROR : ", e);
+					$("#btnSubmit").prop("disabled", false);
+				}
+			});
+		});
+	});
+
+	$.get("/travel/user", function(data) {
+		$("#user").html(data.name);
+		$(".unauthenticated").hide();
+		$(".authenticated").show();
+		$("#calculatorForm").show();
+	});
+	var logout = function() {
+		$.post("/logout", function() {
+			$("#user").html('');
+			$(".unauthenticated").show();
+			$(".authenticated").hide();
+			$("#calculatorForm").hide();
+		})
+		return true;
+	}
+</script>
+<body>
+	<h1 style="margin-left: 30px;">The Country Neighbours Tour</h1>
+	<div class="container unauthenticated">
+		<div>
+			To Use The App <a href="/oauth2/authorization/google"> Login With
+				Google</a>
+		</div>
+	</div>
+	<div class="container authenticated" style="display: none">
+		<div>
+			Logged in as: <span id="user"></span>
+			<button onClick="logout()" class="btn btn-primary">Logout</button>
+		</div>
+
+	    <br />
+
+		<form class="form-horizontal" id="calculatorForm">
+
+			<div class="form-group form-group-lg">
+				<label class="col-sm-2 control-label">Starting Country:</label>
+				<div class="col-sm-4">
+					<select id="country">
+						<option value="BULGARIA">Bulgaria</option>
+						<option value="GREECE">Greece</option>
+						<option value="TURKEY">Turkey</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group form-group-lg">
+				<label class="col-sm-2 control-label">Budget per Country:</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="budgetPerCountry" />
+				</div>
+			</div>
+
+			<div class="form-group form-group-lg">
+				<label class="col-sm-2 control-label">Total Budget:</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="totalBudget" />
+				</div>
+			</div>
+
+			<div class="form-group form-group-lg">
+				<label class="col-sm-2 control-label">Currency:</label>
+				<div class="col-sm-4">
+					<select id="currency">
+						<option value="BGN">Bulgarian lev</option>
+						<option value="RSD">Serbian dinar</option>
+						<option value="RON">Romanian leu</option>
+						<option value="EUR">Euro</option>
+						<option value="TRY">Turkish lira</option>
+						<option value="MKD">Macedonian denar</option>
+						<option value="USD">US Dollar</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" id="bth-search"
+						class="btn btn-primary btn-lg">Calculate Travel Data</button>
+				</div>
+			</div>
+
+			<div id="result"></div>
+		</form>
+
+	</div>
+</body>
+</html>

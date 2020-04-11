@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: travel-tour
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 23159769470-84j792ekr1vag4gbtuvr0r8juk99d4lt.apps.googleusercontent.com
+            client-secret: 8QZdvNvpO2XI3X0vt91lkLvB
+            
+logging:
+  level:
+    org: 
+      springframework: INFO
+    com:
+      example:
+         demo: DEBUG
