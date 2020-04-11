@@ -13,6 +13,12 @@ public enum Country {
 			return Currency.EUR;
 		}
 	},
+	ALBANIA {
+		@Override
+		public Currency getCurrency() {
+			return Currency.ALL;
+		}
+	},
 	ROMANIA {
 		@Override
 		public Currency getCurrency() {

@@ -21,8 +21,7 @@ public class Application {
     @Bean
     public CommandLineRunner run(CountriesGraph countriesGraph) {
         return (String[] args) -> {
-        	log.info("<<<<< " + countriesGraph.getCountryNeighbours(Country.BULGARIA));
-        	log.warn("<<<<< " + Country.BULGARIA);
+        	log.debug("Countries Graph: " + countriesGraph);
         };
     }
 }

@@ -27,8 +27,8 @@ public enum Currency {
 			return euroValue * localToEuroRate;
 		}
 	},
-	USD {
-		private final float localToEuroRate = 1.1f;
+	ALL {
+		private final float localToEuroRate = 31.14f;
 
 		@Override
 		public float getEuroAmount(float localValue) {
